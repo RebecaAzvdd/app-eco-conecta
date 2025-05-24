@@ -3,13 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD0xxtt8vqlq-lZrQJ9csGvFMjffvIpViQ",
-    authDomain: "eco-conecta-8ee34.firebaseapp.com",
-    projectId: "eco-conecta-8ee34",
-    storageBucket: "eco-conecta-8ee34.firebasestorage.app",
-    messagingSenderId: "577243524748",
-    appId: "1:577243524748:web:5db9ca3a0c91594efc95a9",
-    measurementId: "G-C2EX7JJS6J"
+    apiKey:process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
   };
 
 const app = initializeApp(firebaseConfig);
