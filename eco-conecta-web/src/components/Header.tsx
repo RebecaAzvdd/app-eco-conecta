@@ -4,6 +4,7 @@ import {
   ExclamationTriangleIcon,
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -22,6 +23,7 @@ export default function Header() {
 
       {/* Logo Central Absoluta */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <Link href="/">
         <Image
           src="/conecta.png"
           alt="Eco Conecta Logo"
@@ -29,13 +31,16 @@ export default function Header() {
           height={40}
           className="mx-auto"
         />
+      </Link>
       </div>
 
       {/* Seção Direita */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2">
-        <button className="text-white hover:text-[#02391e]" title="Login">
-          <ArrowRightStartOnRectangleIcon className="w-6 h-6" />
-        </button>
+        <Link href="/login">
+          <button className="text-white hover:text-[#02391e]" title="Login">
+            <ArrowRightStartOnRectangleIcon className="w-6 h-6" />
+          </button>
+        </Link>
       </div>
     </header>
   );

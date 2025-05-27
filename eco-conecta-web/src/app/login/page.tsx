@@ -1,4 +1,5 @@
 'use client';
+import Header from "@/components/Header";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
@@ -22,6 +23,8 @@ export default function LoginPage() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white p-8 rounded shadow">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">Sign in</h2>
@@ -80,5 +83,6 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+    </>
   );
 }

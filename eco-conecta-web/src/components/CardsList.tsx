@@ -33,8 +33,8 @@ const CardsList: React.FC<Props> = ({ type, filterParams }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {items.map((item) => (
-        <Card key={item.id} {...item} type={type} />
+      {items.map((item, index) => (
+        <Card key={item.id || index} {...item} type={type} />
       ))}
     </div>
   );
