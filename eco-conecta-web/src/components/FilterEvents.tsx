@@ -10,12 +10,12 @@ const FilterSection = () => {
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [results, setResults] = useState<ContentItem[]>([]);
-  const [filterType, setFilterType] = useState<"event" | "post">("event");
+  const [filterType, setFilterType] = useState<"Evento" | "post">("event");
 
   const handleSearch = async () => {
     try {
       const data =
-        filterType === "event"
+        filterType === "Evento"
           ? await fetchFilteredEvents(location, date)
           : await fetchFilteredPosts(location, date);
       setResults(data);

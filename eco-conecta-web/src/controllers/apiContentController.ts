@@ -5,12 +5,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/";
 
 
 export const fetchContent = async (
-  type: "event" | "post",
+  type: "Evento" | "Post",
   filterParams?: { location?: string; date?: string }
 ): Promise<ContentCardProps[]> => {
   const apiUrl = {
-    event: `${API_URL}api/events`,
-    post: `${API_URL}api/posts`,
+    Evento: `${API_URL}api/events`,
+    Post: `${API_URL}api/posts`,
   }[type];
   const response = await axios.get<ContentCardProps[]>(apiUrl, {
     params: filterParams,

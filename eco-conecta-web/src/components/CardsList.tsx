@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Card, { ContentCardProps } from "./Card";
 import { fetchContent } from "@/controllers/apiContentController";
+
 interface Props {
-  type: "event" | "post";
+  type: "Evento" | "Post";
   filterParams?: {
     location?: string;
     date?: string;
@@ -31,7 +32,7 @@ const CardsList: React.FC<Props> = ({ type, filterParams }) => {
   if (items.length === 0) return <p>Nenhum {type} encontrado.</p>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {items.map((item) => (
         <Card key={item.id} {...item} type={type} />
       ))}
