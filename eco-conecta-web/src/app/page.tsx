@@ -1,6 +1,5 @@
 "use client";
 import CardsList from "@/components/CardsList";
-import FilterSection from "@/components/FilterEvents";
 import Header from "@/components/Header";
 import { useState } from "react";
 
@@ -12,8 +11,6 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Header />
-      <FilterSection />
-
       <div className="px-4 sm:px-10 md:px-20 py-10 space-y-14">
         {/* Seção de Eventos */}
         <section>
