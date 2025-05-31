@@ -1,7 +1,7 @@
 const { db } = require("../config/firebase");
 
 const createUser = async (req, res) => {
-  const { uid, displayName, email, photoURL = "", bio = "", role = "user" } = req.body;
+  const { uid, displayName, email, photoURL = "", bio = "", role = "user", password} = req.body;
 
   try {
     await db.collection("users").doc(uid).set({
@@ -11,6 +11,7 @@ const createUser = async (req, res) => {
       photoURL,
       bio,
       role,
+      password,
       createdAt: new Date(),
     });
 
@@ -37,7 +38,7 @@ const getUser = async (req, res) => {
 };
 const updateUser = async (req, res) => {
   const { uid } = req.params;
-  const { displayName, email, photoURL, bio, role } = req.body;
+  const { displayName, email, photoURL, bio, role, password } = req.body;
 
   try {
     const userRef = db.collection("users").doc(uid);
@@ -53,6 +54,7 @@ const updateUser = async (req, res) => {
       photoURL,
       bio,
       role,
+      password,
       updatedAt: new Date(),
     });
 
