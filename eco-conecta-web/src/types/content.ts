@@ -10,7 +10,7 @@ export type Post = {
 export type Event = {
     title: string;
     description: string;
-    date: string;
+    date?: string;
     location?: string;
     imageUrl?: string;
     category?: string;
