@@ -1,5 +1,6 @@
 "use client";
 import CardsList from "@/components/CardsList";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import { useState } from "react";
@@ -13,7 +14,7 @@ const HomePage: React.FC = () => {
     <>
       <Header />
       {/* Hero Section */}
-      <div>
+      <div className="py-10">
         <Hero />
       </div>
       <div className="px-4 sm:px-10 md:px-20 py-10 space-y-14">
@@ -37,6 +38,8 @@ const HomePage: React.FC = () => {
           </div>
         </section>
       </div>
+      {/* Footer Section */}
+      <Footer />
     </>
   );
 };

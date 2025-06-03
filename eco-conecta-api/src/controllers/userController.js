@@ -80,4 +80,5 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Erro ao deletar usuário", details: error.message });
   }
 };
+
 module.exports = { createUser, getUser, updateUser, deleteUser };

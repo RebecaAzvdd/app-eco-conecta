@@ -15,7 +15,7 @@ export default function FormSignUp() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("User created successfully!");
+      window.location.href = "/login"; 
     } catch (err: any) {
       setError(err.message);
     }
@@ -25,7 +25,7 @@ export default function FormSignUp() {
     <>
       <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
         <div className="w-full max-w-md bg-white p-8 rounded shadow">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Sign up</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Cadastro</h2>
           {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
           <form onSubmit={handleSignUp} className="space-y-4">
@@ -36,7 +36,7 @@ export default function FormSignUp() {
               <input
                 type="email"
                 required
-                className="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full border text-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -49,7 +49,7 @@ export default function FormSignUp() {
               <input
                 type="password"
                 required
-                className="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full border text-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

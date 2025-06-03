@@ -6,10 +6,10 @@ async function seed() {
   try {
     // Cria o usuário no Firebase Authentication
     const userRecord = await admin.auth().createUser({
-      uid: "test-user-2",
-      email: "teste2@email.com",
+      uid: "test-user-22",
+      email: "teste22@email.com",
       password: "123456", // coloque uma senha segura para testes
-      displayName: "Usuário de Teste",
+      displayName: "Usuárioo de Teste",
     });
 
     // Adiciona o mesmo usuário ao Firestore

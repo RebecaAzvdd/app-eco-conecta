@@ -15,7 +15,8 @@ export default function FormLogin() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
+       // Redireciona para a página inicial após o login
+       window.location.href = "/";
     } catch (err: any) {
       setError(err.message);
     }
@@ -25,7 +26,7 @@ export default function FormLogin() {
     <>
     <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white p-8 rounded shadow">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800">Sign in</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800">Login</h2>
 
         {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
@@ -37,7 +38,7 @@ export default function FormLogin() {
             <input
               type="email"
               required
-              className="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="w-full border rounded-full px-4 text-black py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -50,7 +51,7 @@ export default function FormLogin() {
             <input
               type="password"
               required
-              className="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="w-full border rounded-full px-4 text-black py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

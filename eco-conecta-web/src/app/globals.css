@@ -22,3 +22,9 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.hero-background {
+  background-image: url('/eco-conecta-web/public/banner.jpg');
+  background-size: cover;
+  background-position: center;
+}

@@ -10,8 +10,9 @@ import {
 import Link from "next/link";
 import CreatePostModal from "./CreatePostModal";
 import CreateEventModal from "./EventsModal";
-
+import { useAuth } from "@/context/AuthContext";
 const Header: React.FC = () => {
+  const { user, loading } = useAuth(); 
   const [isModalPostOpen, setIsModalPostOpen] = useState(false);
   const [isModalEventOpen, setIsModalEventOpen] = useState(false);
   return (
@@ -51,12 +52,29 @@ const Header: React.FC = () => {
 
         {/* Seção Direita */}
         <div className="absolute right-4 top-1/2 -translate-y-1/2 gap-3">
-          <Link href="/profile">
-            <button className="text-white hover:text-[#02391e]" title="Login">
+           {user ? (
+            <Link href="/profile" passHref>
+              <button
+                className="text-white hover:text-[#02391e]"
+                title="Perfil"
+              >
+                <UserIcon className="w-6 h-6" />
+              </button>
+            </Link>
+          ) : (
+            <button
+              className="text-gray-400 cursor-not-allowed relative group"
+              title="Faça login para acessar o perfil"
+              onClick={(e) => e.preventDefault()}
+            >
               <UserIcon className="w-6 h-6" />
+              {/* Tooltip */}
+              <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                Faça login para acessar o perfil
+              </span>
             </button>
-          </Link>
-          <Link href="/login">
+          )}
+          <Link href="/login" passHref>
             <button className="text-white hover:text-[#02391e]" title="Login">
               <ArrowRightStartOnRectangleIcon className="w-6 h-6" />
             </button>

@@ -1,7 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { deleteUser, updateUser} from "@/controllers/apiContentController";
 
 export default function ProfileCard() {
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState({
     name: false,
     email: false,
@@ -15,25 +18,77 @@ export default function ProfileCard() {
     }));
   };
 
-  const handleSave = (field: string) => {
-    // Lógica para salvar será implementada com backend
-    console.log(`Salvando ${field}`);
-    toggleEdit(field);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+   useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        password: user.password || "", // cuidado, normalmente não exibimos senha
+      });
+    }
+  }, [user]);
+
+    const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof typeof formData
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: e.target.value,
+    }));
   };
+
+  const handleSave = async (field: keyof typeof formData) => {
+  try {
+     if (!userId) {
+    console.error("ID do usuário não encontrado.");
+    return;
+  }
+  console.log(userId, formData[field]);
+    const updatedUser = await updateUser(userId, { [field]: formData[field] });
+    console.log(`Campo ${field} atualizado com sucesso`, updatedUser);
+    toggleEdit(field);
+  } catch (error) {
+    console.error(`Erro ao atualizar o campo ${field}:`, error);
+    // Aqui você pode exibir uma mensagem de erro para o usuário
+  }
+};
 
   const handleLogout = () => {
-    // Lógica de logout será implementada
-    console.log("Fazendo logout...");
-  };
+  // Limpar cache local, localStorage, cookies, etc.
+  localStorage.clear();
+  sessionStorage.clear();
+  // Se tiver algo específico no contexto, limpe também aqui
 
-  const handleDeleteAccount = () => {
-    // Lógica de deletar conta será implementada
-    console.log("Deletando conta...");
+  // Redirecionar para a home (ajuste conforme sua rota)
+  window.location.href = "/";
+};
+
+const userId = user?.id; 
+ const handleDeleteAccount = async () => {
+  if (!userId) {
+    console.error("ID do usuário não encontrado.");
+    return;
+  }
+  try {
+    await deleteUser(userId);
+    console.log("Conta deletada com sucesso");
     setShowDeleteModal(false);
-  };
+    handleLogout(); // Após deletar, desloga e limpa cache
+  } catch (error) {
+    console.error("Erro ao deletar conta:", error);
+    // Exiba mensagem de erro se desejar
+  }
+};
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+     <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg">
         {/* Header do Card */}
         <div className="text-center p-6 border-b border-gray-200">
@@ -88,6 +143,8 @@ export default function ProfileCard() {
                   type="text"
                   placeholder="Seu nome completo"
                   disabled={!isEditing.name}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e, "name")}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
                 />
               </div>
@@ -95,6 +152,7 @@ export default function ProfileCard() {
                 <button
                   onClick={() => toggleEdit("name")}
                   className="px-3 py-2 border border-green-200 text-green-600 rounded-md hover:bg-green-50 transition-colors"
+                  aria-label="Editar nome"
                 >
                   <svg
                     className="w-4 h-4"
@@ -149,6 +207,8 @@ export default function ProfileCard() {
                   type="email"
                   placeholder="seu@email.com"
                   disabled={!isEditing.email}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange(e, "email")}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
                 />
               </div>
@@ -156,6 +216,7 @@ export default function ProfileCard() {
                 <button
                   onClick={() => toggleEdit("email")}
                   className="px-3 py-2 border border-green-200 text-green-600 rounded-md hover:bg-green-50 transition-colors"
+                  aria-label="Editar email"
                 >
                   <svg
                     className="w-4 h-4"
@@ -202,21 +263,25 @@ export default function ProfileCard() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    d="M12 11c.5 0 1-.5 1-1V7a1 1 0 00-2 0v3c0 .5.5 1 1 1zM7 11v2a5 5 0 0010 0v-2M6 11a6 6 0 1112 0v2a7 7 0 01-14 0v-2z"
                   />
                 </svg>
                 <input
                   id="password"
                   type={isEditing.password ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder="Sua senha"
                   disabled={!isEditing.password}
+                  value={formData.password}
+                  onChange={(e) => handleInputChange(e, "password")}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  autoComplete="new-password"
                 />
               </div>
               {!isEditing.password ? (
                 <button
                   onClick={() => toggleEdit("password")}
                   className="px-3 py-2 border border-green-200 text-green-600 rounded-md hover:bg-green-50 transition-colors"
+                  aria-label="Editar senha"
                 >
                   <svg
                     className="w-4 h-4"
@@ -243,98 +308,52 @@ export default function ProfileCard() {
             </div>
           </div>
 
-          {/* Separador */}
-          <div className="border-t border-gray-200 my-6"></div>
-
-          {/* Ações da Conta */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Ações da Conta
-            </h3>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              {/* Botão Logout */}
-              <button
-                onClick={handleLogout}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-green-200 text-green-600 rounded-md hover:bg-green-50 transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                Sair da Conta
-              </button>
-
-              {/* Botão Deletar Conta */}
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-md hover:bg-red-50 transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-                Deletar Conta
-              </button>
-            </div>
-          </div>
-
-          {/* Informações Adicionais */}
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <p className="text-sm text-green-700">
-              <strong>Dica:</strong> Mantenha suas informações sempre
-              atualizadas para garantir a segurança da sua conta.
-            </p>
+          {/* Botões Ação */}
+          <div className="flex gap-4 justify-end">
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors"
+            >
+              Sair
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Excluir Conta
+            </button>
           </div>
         </div>
+
+        {/* Modal de confirmação para excluir conta */}
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+              <h2 className="text-lg font-semibold mb-4 text-black">
+                Confirmar exclusão
+              </h2>
+              <p className="mb-6 text-black">
+                Tem certeza que deseja excluir sua conta? Essa ação não pode
+                ser desfeita.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 border text-black border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Modal de Confirmação para Deletar Conta */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Tem certeza?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Esta ação não pode ser desfeita. Isso irá deletar permanentemente
-              sua conta e remover todos os seus dados de nossos servidores.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleDeleteAccount}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-              >
-                Sim, deletar conta
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
